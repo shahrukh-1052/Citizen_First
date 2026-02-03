@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen First - About Program</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}?v=1.0">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="navbar">
+        <div class="logo">
+            <h2>Citizen First</h2>
+        </div>
+        <nav class="nav-links">
+            <a href="/accounts/login/" class="btn">Login</a>
+            <a href="/accounts/register/" class="btn btn-primary">Register</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1 class="fade-in">Empowering Citizens, Strengthening Communities</h1>
+        <p class="slide-up">
+            Citizen First is a unified digital portal that connects citizens with governance.
+            It simplifies access to services, ensures transparency, and builds trust through seamless communication.
+        </p>
+        <a href="/accounts/register/" class="cta bounce">Join the Community</a>
+    </section>
+
+    <!-- Mission Section -->
+    <section class="mission fade-in">
+        <h2>Our Mission</h2>
+        <p>
+            To create a transparent, citizen-centric ecosystem where technology empowers communities,
+            strengthens governance, and builds a safer, smarter society.
+        </p>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat">
+            <h3 id="panchayats">0+</h3>
+            <p>Registered Gram Panchayats</p>
+        </div>
+        <div class="stat">
+            <h3 id="corporations">0+</h3>
+            <p>Registered Municipal Corporations</p>
+        </div>
+        <div class="stat">
+            <h3 id="users">0+</h3>
+            <p>Active Citizens</p>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="vision slide-up">
+        <h2>Our Vision</h2>
+        <p>
+            A future where every citizen can report issues, access emergency services, and engage with local governance
+            without barriers — making India’s communities stronger and more connected.
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2026 Citizen First® | All Rights Reserved</p>
+    </footer>
+
+    <!-- Counter Script -->
+    <script>
+        function animateCounter(id, target) {
+            let element = document.getElementById(id);
+            let count = 0;
+            let step = Math.ceil(target / 100);
+            let interval = setInterval(() => {
+                count += step;
+                if (count >= target) {
+                    count = target;
+                    clearInterval(interval);
+                }
+                element.textContent = count.toLocaleString() + "+";
+            }, 30);
+        }
+
+        let observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter('panchayats', 1250);
+                    animateCounter('corporations', 320);
+                    animateCounter('users', 50000);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        let statsSection = document.querySelector('.stats');
+        if (statsSection) {
+            observer.observe(statsSection);
+        }
+    </script>
+
+</body>
+
+</html>

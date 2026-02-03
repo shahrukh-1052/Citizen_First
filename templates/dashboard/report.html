@@ -1,0 +1,91 @@
+{% extends 'dashboard/base_subpage.html' %}
+
+{% block title %}Report Issues - Citizen First{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-5 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">New Report</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-select" required>
+                            <option value="">Select Category</option>
+                            <option value="TRASH">Trash Reporting</option>
+                            <option value="WATER">Water Supply</option>
+                            <option value="ELECTRICITY">Electricity</option>
+                            <option value="STREETLIGHT">Streetlight</option>
+                            <option value="ROAD">Road Maintenance</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="3" required
+                            placeholder="Describe the issue..."></textarea>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <input type="text" name="house_no" class="form-control" placeholder="House No">
+                        </div>
+                        <div class="col">
+                            <input type="text" name="street" class="form-control" placeholder="Street">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <input type="text" name="village" class="form-control" placeholder="Village/Sector">
+                        </div>
+                        <div class="col">
+                            <input type="text" name="area" class="form-control" placeholder="Area">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Upload Photo (Optional)</label>
+                        <input type="file" name="photo" class="form-control" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Submit Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <h3 class="mb-3">Your Recent Reports</h3>
+        {% if my_reports %}
+        {% for report in my_reports %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <h5 class="card-title text-primary">{{ report.get_category_display }}</h5>
+                    <span
+                        class="badge {% if report.status == 'RESOLVED' %}bg-success{% elif report.status == 'IN_PROGRESS' %}bg-warning{% else %}bg-secondary{% endif %}">
+                        {{ report.get_status_display }}
+                    </span>
+                </div>
+                <p class="card-text text-muted small">{{ report.created_at|date:"M d, Y" }}</p>
+                <p class="card-text">{{ report.description }}</p>
+                <p class="card-text small text-muted">
+                    📍 {{ report.house_no }} {{ report.street }} {{ report.village }}
+                </p>
+                {% if report.photo %}
+                <a href="{{ report.photo.url }}" target="_blank" class="btn btn-sm btn-outline-info">View Photo</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="alert alert-info">You haven't reported any issues yet.</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

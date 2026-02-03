@@ -1,0 +1,35 @@
+{% extends 'dashboard/base_subpage.html' %}
+{% load static %}
+
+{% block title %}Emergency Numbers - Citizen First{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4">Emergency Support</h1>
+    <p class="lead text-muted">24/7 Helpline numbers for immediate assistance from government services.</p>
+</div>
+
+<div class="row">
+    {% for category, details in grouped_numbers.items %}
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0">{{ category|title }}</h4>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for item in details %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="fw-bold">{{ item.name }}</span>
+                    </div>
+                    <a href="tel:{{ item.number }}" class="btn btn-outline-danger btn-sm">
+                        📞 {{ item.number }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

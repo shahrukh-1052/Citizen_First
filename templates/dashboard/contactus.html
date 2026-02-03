@@ -1,0 +1,23 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Citizen First - Contact Us</title>
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header-section">
+            <h1>Contact Us</h1>
+            <p>Get in touch with us for any inquiries or support.</p>
+            <a href="{% url 'dashboard' %}" class="nav-btn"
+                style="background:#34495e; color:white; margin-top:20px; display:inline-block;">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+
+</html>

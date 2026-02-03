@@ -1,0 +1,98 @@
+{% extends 'dashboard/base_subpage.html' %}
+
+{% block title %}Lost & Found - Citizen First{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">Report Item</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label">I have...</label>
+                        <select name="type" class="form-select" required>
+                            <option value="LOST">Lost an Item</option>
+                            <option value="FOUND">Found an Item</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="text" name="title" class="form-control" placeholder="Item Name (e.g. Wallet)"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <textarea name="description" class="form-control" rows="3"
+                            placeholder="Description (Color, brand, etc.)" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="text" name="location" class="form-control" placeholder="Location Lost/Found"
+                            required>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="date" name="date" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="text" name="contact_info" class="form-control"
+                            placeholder="Your Contact Info (Phone/Email)" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Upload Photo</label>
+                        <input type="file" name="image" class="form-control" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100">Submit Post</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <h3 class="mb-3">Recent Posts</h3>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for item in items %}
+            <div class="col">
+                <div class="card h-100">
+                    {% if item.image %}
+                    <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.title }}"
+                        style="height: 200px; object-fit: cover;">
+                    {% else %}
+                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center"
+                        style="height: 200px;">
+                        <span class="text-muted">No Image</span>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <span class="badge {% if item.type == 'LOST' %}bg-danger{% else %}bg-success{% endif %} mb-2">
+                            {{ item.get_type_display }}
+                        </span>
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <p class="card-text small">{{ item.description|truncatechars:100 }}</p>
+                        <ul class="list-unstyled small text-muted">
+                            <li>📅 {{ item.date_lost_found }}</li>
+                            <li>📍 {{ item.location }}</li>
+                            <li>📞 {{ item.contact_info }}</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer bg-transparent">
+                        <small class="text-muted">Posted {{ item.created_at|timesince }} ago</small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">No lost or found items reported recently.</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
