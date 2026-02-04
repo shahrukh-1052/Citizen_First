@@ -86,3 +86,41 @@ def get_location_from_pincode(pincode):
     except Exception as e:
         print(f"Error fetching location: {e}")
     return None
+
+import secrets
+import string
+from django.core.mail import send_mail
+
+def forgot_password_view(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+            # Generate random 8-char password
+            alphabet = string.ascii_letters + string.digits
+            otp = ''.join(secrets.choice(alphabet) for i in range(8))
+            
+            user.set_password(otp)
+            user.save()
+            
+            # Send Email
+            subject = 'Password Reset - Citizen First'
+            message = f'Your one-time password is: {otp}\n\nPlease login and change your password in settings immediately.'
+            email_from = 'admin@citizenfirst.com'
+            recipient_list = [email]
+            
+            # print(f"DEBUG OTP for {email}: {otp}") # REMOVED FOR SECURITY
+            
+            try:
+                send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+                messages.success(request, f"One-Time Password sent to {email}")
+            except Exception as e:
+                print(f"Email sending failed: {e}")
+                messages.warning(request, "Email sending failed. Please try again later or contact support.")
+                
+            return redirect('login')
+            
+        except User.DoesNotExist:
+            messages.error(request, "No account found with this email")
+            
+    return render(request, 'accounts/forgot_password.html')

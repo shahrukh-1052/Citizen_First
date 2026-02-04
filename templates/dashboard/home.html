@@ -1,219 +1,127 @@
+{% extends 'dashboard/base_dashboard.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Citizen First - Home</title>
-  <link rel="stylesheet" href="{% static 'css/home.css' %}">
-  <!-- Google Fonts for Premium Look -->
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-</head>
+{% block title %}Citizen First - Home{% endblock %}
 
-<body>
-
-  <!-- Top Navigation Header -->
-  <header class="main-header">
-    <div class="header-content">
-      <div class="brand-section">
-        <div class="logo-icon">C</div>
-        <span class="brand-name">Citizen First</span>
+{% block content %}
+<!-- Pincode Prompt Overlay (Shows if pincode is empty) -->
+{% if not user.profile.pincode %}
+<div class="location-prompt-overlay" id="locationOverlay">
+  <div class="prompt-card 3d-card">
+    <div class="prompt-icon">📍</div>
+    <h3>Local Access</h3>
+    <p>Enter your Area Pincode to connect with your local community services.</p>
+    <form method="POST" action="{% url 'dashboard' %}" class="pincode-form">
+      {% csrf_token %}
+      <div class="input-group">
+        <input type="text" name="pincode" placeholder="e.g. 500032" maxlength="6" pattern="\d{6}" required
+          autocomplete="off">
+        <button type="submit" name="update_location" class="location-btn">
+          Connect
+          <span class="btn-arrow">→</span>
+        </button>
       </div>
-
-      <div class="location-display">
-        {% if pincode_location %}
-        <div class="location-badge">
-          <span class="loc-icon">📍</span>
-          <span class="loc-text">{{ pincode_location }}</span>
-        </div>
-        {% endif %}
-      </div>
-
-      <div class="header-right">
-        <nav class="nav-links">
-          <a href="{% url 'about_us' %}" class="nav-item">About</a>
-          <a href="{% url 'contact_us' %}" class="nav-item">Contact</a>
-          <a href="{% url 'settings' %}" class="nav-item">Settings</a>
-        </nav>
-
-        <div class="profile-container">
-          <button id="profileBtn" class="profile-btn">
-            <div class="avatar-circle">
-              {{ full_name|make_list|first|upper }}
-            </div>
-            <span class="profile-name">{{ full_name }}</span>
-          </button>
-          <div id="profileDropdown" class="profile-dropdown-content">
-            <div class="dropdown-info">
-              <p class="dd-name">{{ full_name }}</p>
-              <p class="dd-email">{{ user.email }}</p>
-            </div>
-            <div class="dropdown-divider"></div>
-            <a href="{% url 'settings' %}" class="dropdown-item">Settings</a>
-            <a href="/accounts/logout/" class="dropdown-item logout">Logout</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- Pincode Prompt Overlay (Shows if pincode is empty) -->
-  {% if not profile.pincode %}
-  <div class="location-prompt-overlay" id="locationOverlay">
-    <div class="prompt-card 3d-card">
-      <div class="prompt-icon">📍</div>
-      <h3>Local Access</h3>
-      <p>Enter your Area Pincode to connect with your local community services.</p>
-      <form method="POST" action="{% url 'dashboard' %}" class="pincode-form">
-        {% csrf_token %}
-        <div class="input-group">
-          <input type="text" name="pincode" placeholder="e.g. 500032" maxlength="6" pattern="\d{6}" required
-            autocomplete="off">
-          <button type="submit" name="update_location" class="location-btn">
-            Connect
-            <span class="btn-arrow">→</span>
-          </button>
-        </div>
-      </form>
-    </div>
+    </form>
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
-  <!-- Main Content -->
-  <main class="main-container">
-    <div class="hero-text">
-      <h1>Community Dashboard</h1>
-      <p>Your integrated portal for local services and updates</p>
+<div class="hero-text">
+  <h1>Welcome, {{ user.profile.full_name|default:user.username }}</h1>
+  <p>Your integrated portal for local services and updates</p>
+</div>
+
+<!-- Dashboard Grid -->
+<div class="dashboard-grid">
+  <!-- Card 1: Report -->
+  <a href="{% url 'report' %}" class="grid-card color-1">
+    <div class="tab-default">
+      <h3>Report Issues</h3>
     </div>
-
-    <!-- Dashboard Grid -->
-    <div class="dashboard-grid">
-      <!-- Card 1: Report -->
-      <a href="{% url 'report' %}" class="grid-card color-1">
-        <div class="card-content">
-          <div class="icon-box">
-            <img src="{% static 'img/icons/report.png' %}" alt="Report">
-          </div>
-          <div class="text-box">
-            <h3>Report Issues</h3>
-            <p>Fix your community</p>
-          </div>
-        </div>
-        <div class="hover-glow"></div>
-      </a>
-
-      <!-- Card 2: Emergency -->
-      <a href="{% url 'emergency' %}" class="grid-card color-2">
-        <div class="card-content">
-          <div class="icon-box">
-            <img src="{% static 'img/icons/emergency.png' %}" alt="Emergency">
-          </div>
-          <div class="text-box">
-            <h3>Emergency</h3>
-            <p>Quick helplines</p>
-          </div>
-        </div>
-        <div class="hover-glow"></div>
-      </a>
-
-      <!-- Card 3: Lost & Found -->
-      <a href="{% url 'lost_found' %}" class="grid-card color-3">
-        <div class="card-content">
-          <div class="icon-box">
-            <img src="{% static 'img/icons/help.png' %}" alt="Lost">
-          </div>
-          <div class="text-box">
-            <h3>Lost & Found</h3>
-            <p>Recover items</p>
-          </div>
-        </div>
-        <div class="hover-glow"></div>
-      </a>
-
-      <!-- Card 4: Events -->
-      <a href="{% url 'events' %}" class="grid-card color-4">
-        <div class="card-content">
-          <div class="icon-box">
-            <img src="{% static 'img/icons/community.png' %}" alt="Events">
-          </div>
-          <div class="text-box">
-            <h3>Local Events</h3>
-            <p>What's happening</p>
-          </div>
-        </div>
-        <div class="hover-glow"></div>
-      </a>
-
-      <!-- Card 5: Feedback -->
-      <a href="{% url 'feedback' %}" class="grid-card color-5">
-        <div class="card-content">
-          <div class="icon-box">
-            <img src="{% static 'img/icons/feedback.png' %}" alt="Feedback">
-          </div>
-          <div class="text-box">
-            <h3>Feedback</h3>
-            <p>Share thoughts</p>
-          </div>
-        </div>
-        <div class="hover-glow"></div>
-      </a>
-
-      <!-- Card 6: Alerts -->
-      <a href="{% url 'alerts' %}" class="grid-card color-6">
-        <div class="card-content">
-          <div class="icon-box">
-            <img src="{% static 'img/icons/safety.png' %}" alt="Alerts">
-          </div>
-          <div class="text-box">
-            <h3>Alerts</h3>
-            <p>Stay informed</p>
-          </div>
-        </div>
-        <div class="hover-glow"></div>
-      </a>
-
-      <!-- Card 7: Chat -->
-      <a href="{% url 'chat' %}" class="grid-card color-7">
-        <div class="card-content">
-          <div class="icon-box">
-            <img src="{% static 'img/icons/resources.png' %}" alt="Chat">
-          </div>
-          <div class="text-box">
-            <h3>Chat</h3>
-            <p>Community connect</p>
-          </div>
-        </div>
-        <div class="hover-glow"></div>
-      </a>
+    <div class="tab-hover">
+      <div class="icon-box">
+        <img src="{% static 'img/icons/report.png' %}" alt="Report">
+      </div>
+      <p>Help improve your community</p>
     </div>
-  </main>
+  </a>
 
-  <footer class="main-footer">
-    <p>&copy; 2024 Citizen First. All rights reserved.</p>
-  </footer>
+  <!-- Card 2: Emergency -->
+  <a href="{% url 'emergency' %}" class="grid-card color-2">
+    <div class="tab-default">
+      <h3>Emergency Numbers</h3>
+    </div>
+    <div class="tab-hover">
+      <div class="icon-box">
+        <img src="{% static 'img/icons/emergency.png' %}" alt="Emergency">
+      </div>
+      <p>Quick access to help</p>
+    </div>
+  </a>
 
-  <script>
-    // Profile Dropdown Toggle
-    const profileBtn = document.getElementById('profileBtn');
-    const profileDropdown = document.getElementById('profileDropdown');
+  <!-- Card 3: Lost & Found -->
+  <a href="{% url 'lost_found' %}" class="grid-card color-3">
+    <div class="tab-default">
+      <h3>Lost & Found</h3>
+    </div>
+    <div class="tab-hover">
+      <div class="icon-box">
+        <img src="{% static 'img/icons/help.png' %}" alt="Lost">
+      </div>
+      <p>Return or find items</p>
+    </div>
+  </a>
 
-    if (profileBtn) {
-      profileBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        profileBtn.classList.toggle('active');
-        profileDropdown.classList.toggle('show');
-      });
+  <!-- Card 4: Events -->
+  <a href="{% url 'events' %}" class="grid-card color-4">
+    <div class="tab-default">
+      <h3>Local Events</h3>
+    </div>
+    <div class="tab-hover">
+      <div class="icon-box">
+        <img src="{% static 'img/icons/community.png' %}" alt="Events">
+      </div>
+      <p>What's happening nearby</p>
+    </div>
+  </a>
 
-      document.addEventListener('click', (e) => {
-        if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
-          profileDropdown.classList.remove('show');
-          profileBtn.classList.remove('active');
-        }
-      });
-    }
-  </script>
+  <!-- Card 5: Feedback -->
+  <a href="{% url 'feedback' %}" class="grid-card color-5">
+    <div class="tab-default">
+      <h3>Public Feedback</h3>
+    </div>
+    <div class="tab-hover">
+      <div class="icon-box">
+        <img src="{% static 'img/icons/feedback.png' %}" alt="Feedback">
+      </div>
+      <p>Share your suggestions</p>
+    </div>
+  </a>
 
-</body>
+  <!-- Card 6: Alerts -->
+  <a href="{% url 'alerts' %}" class="grid-card color-6">
+    <div class="tab-default">
+      <h3>Emergency Alerts</h3>
+    </div>
+    <div class="tab-hover">
+      <div class="icon-box">
+        <img src="{% static 'img/icons/safety.png' %}" alt="Alerts">
+      </div>
+      <p>Stay safe and informed</p>
+    </div>
+  </a>
 
-</html>
+  <!-- Card 7: Chat -->
+  <a href="{% url 'chat' %}" class="grid-card color-7">
+    <div class="tab-default">
+      <h3>Community Chat</h3>
+    </div>
+    <div class="tab-hover">
+      <div class="icon-box">
+        <img src="{% static 'img/icons/resources.png' %}" alt="Chat">
+      </div>
+      <p>Connect with others</p>
+    </div>
+  </a>
+</div>
+{% endblock %}

@@ -1,23 +1,123 @@
+{% extends 'dashboard/base_dashboard.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citizen First - About Us</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-</head>
+{% block title %}Citizen First - About Us{% endblock %}
 
-<body>
-    <div class="container">
-        <div class="header-section">
-            <h1>About Us</h1>
-            <p>Learn more about our mission to serve the community.</p>
-            <a href="{% url 'dashboard' %}" class="nav-btn"
-                style="background:#34495e; color:white; margin-top:20px; display:inline-block;">Back to Dashboard</a>
+{% block extra_css %}
+<style>
+    .page-header {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, white, #f3f4f6);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+    }
+
+    .content-section {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .info-card {
+        background: white;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: var(--card-shadow);
+        margin-bottom: 2rem;
+        transition: transform 0.3s;
+    }
+
+    .info-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .info-card h2 {
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        border-left: 4px solid var(--accent-blue);
+        padding-left: 1rem;
+    }
+
+    .info-card p {
+        color: var(--text-muted);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .value-item {
+        text-align: center;
+        padding: 1.5rem;
+        background: #f9fafb;
+        border-radius: 12px;
+    }
+
+    .value-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Empowering Communities</h1>
+    <p style="color: var(--text-muted);">Bridging the gap between citizens and, governance.</p>
+</div>
+
+<div class="content-section">
+    <div class="info-card">
+        <h2>Our Mission</h2>
+        <p>At Citizen First, our mission is simple yet profound: to create a seamless, transparent, and efficient
+            channel for citizens to interact with their local administration. We believe that every voice matters,
+            and technology should be the enabler that amplifies these voices.</p>
+        <p>We strive to reduce the friction in reporting issues, accessing emergency services, and staying informed
+            about local developments.</p>
+    </div>
+
+    <div class="info-card">
+        <h2>Our Vision</h2>
+        <p>We envision a future where digital governance is not just a concept but a daily reality. A future where a
+            pothole reported in the morning is fixed by the evening, where help is always just a click away, and
+            where communities are tighter, safer, and more informed.</p>
+    </div>
+
+    <div class="info-card">
+        <h2>Core Values</h2>
+        <div class="values-grid">
+            <div class="value-item">
+                <div class="value-icon">🤝</div>
+                <h3>Transparency</h3>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">🚀</div>
+                <h3>Efficiency</h3>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">🛡️</div>
+                <h3>Security</h3>
+            </div>
+            <div class="value-item">
+                <div class="value-icon">💡</div>
+                <h3>Innovation</h3>
+            </div>
         </div>
     </div>
-</body>
 
-</html>
+</div>
+{% endblock %}

@@ -1,23 +1,131 @@
+{% extends 'dashboard/base_dashboard.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Citizen First - Contact Us</title>
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
-</head>
+{% block title %}Citizen First - Contact Us{% endblock %}
 
-<body>
-    <div class="container">
-        <div class="header-section">
-            <h1>Contact Us</h1>
-            <p>Get in touch with us for any inquiries or support.</p>
-            <a href="{% url 'dashboard' %}" class="nav-btn"
-                style="background:#34495e; color:white; margin-top:20px; display:inline-block;">Back to Dashboard</a>
-        </div>
+{% block extra_css %}
+<style>
+    .page-header {
+        text-align: center;
+        padding: 3rem 2rem;
+        background: linear-gradient(135deg, white, #fff1f2);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: 20px;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #1e293b, #3b82f6);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .contact-grid {
+        max-width: 1000px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+
+    .contact-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 20px;
+        box-shadow: var(--card-shadow);
+        text-align: center;
+        transition: transform 0.3s;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .contact-card:hover {
+        transform: translateY(-8px);
+    }
+
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 0 auto 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+    }
+
+    .c-blue {
+        background: #e0e7ff;
+        color: #6366f1;
+    }
+
+    .c-green {
+        background: #d1fae5;
+        color: #10b981;
+    }
+
+    .c-orange {
+        background: #ffedd5;
+        color: #f97316;
+    }
+
+    .contact-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        color: var(--text-dark);
+    }
+
+    .contact-card p {
+        color: var(--text-muted);
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .contact-link {
+        display: inline-block;
+        margin-top: 1rem;
+        color: var(--accent-blue);
+        font-weight: 600;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Get in Touch</h1>
+    <p style="color: var(--text-muted);">We are here to help you 24/7</p>
+</div>
+
+<div class="contact-grid">
+    <!-- Phone -->
+    <div class="contact-card">
+        <div class="icon-circle c-blue">📞</div>
+        <h3>Call Us</h3>
+        <p>Mon-Fri from 8am to 5pm</p>
+        <p style="font-weight: 700; color: var(--text-dark);">+1 (555) 123-4567</p>
+        <a href="tel:+15551234567" class="contact-link">Call now</a>
     </div>
-</body>
 
-</html>
+    <!-- Email -->
+    <div class="contact-card">
+        <div class="icon-circle c-orange">✉️</div>
+        <h3>Email Support</h3>
+        <p>We usually reply within 24h</p>
+        <p style="font-weight: 700; color: var(--text-dark);">support@citizenfirst.com</p>
+        <a href="mailto:support@citizenfirst.com" class="contact-link">Send email</a>
+    </div>
+
+    <!-- Office -->
+    <div class="contact-card">
+        <div class="icon-circle c-green">🏢</div>
+        <h3>Visit Our Office</h3>
+        <p>123 Civic Center,</p>
+        <p>Tech City, TC 90210</p>
+        <a href="#" class="contact-link">Get directions</a>
+    </div>
+</div>
+{% endblock %}

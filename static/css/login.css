@@ -132,6 +132,33 @@ input:focus {
     box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.2);
 }
 
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+
+.password-container input {
+    padding-right: 45px;
+    /* Space for the eye icon */
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 0.75rem;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #fff;
+}
+
 button {
     width: 100%;
     padding: 1rem;
@@ -177,7 +204,8 @@ a:hover {
 }
 
 /* Error Messages */
-.auth-box p:not(:last-child) {
+/* Error Messages */
+.auth-box .message-text {
     color: #ef4444;
     /* Error red */
     background: rgba(239, 68, 68, 0.1);

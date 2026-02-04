@@ -24,7 +24,7 @@ def landing(request):
     return render(request, 'landing.html')
 
 urlpatterns = [
-    path('', landing),
+    path('', landing, name='landing'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
     path('dashboard/', include('dashboard.urls')),

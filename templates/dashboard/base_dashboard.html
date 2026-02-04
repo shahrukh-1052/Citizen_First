@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Citizen First{% endblock %}</title>
+    <!-- Google Fonts for Premium Look -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Top Navigation Header -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="{% url 'dashboard' %}" class="brand-section" style="text-decoration: none;">
+                <div class="logo-icon">C</div>
+                <span class="brand-name">Citizen First</span>
+            </a>
+
+            <div class="location-display">
+                {% if user.profile.pincode %}
+                <div class="location-badge">
+                    <span class="loc-icon">📍</span>
+                    <span class="loc-text" id="userLocation" data-pincode="{{ user.profile.pincode }}">
+                        {{ user.profile.pincode }}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="header-right">
+                <nav class="nav-links">
+                    <a href="{% url 'dashboard' %}" class="nav-item">Home</a>
+                    <a href="{% url 'about_us' %}" class="nav-item">About</a>
+                    <a href="{% url 'contact_us' %}" class="nav-item">Contact</a>
+                    <a href="{% url 'settings' %}" class="nav-item">Settings</a>
+                </nav>
+
+                <div class="profile-container">
+                    <button id="profileBtn" class="profile-btn">
+                        <div class="avatar-circle">
+                            {{ user.profile.full_name|default:user.username|make_list|first|upper }}
+                        </div>
+                        <span class="profile-name">
+                            {{ user.username }}
+                        </span>
+                    </button>
+                    <div id="profileDropdown" class="profile-dropdown-content">
+                        <div class="dropdown-info">
+                            <p class="dd-name">{{ user.profile.full_name|default:user.username }}</p>
+                            <p class="dd-email">{{ user.email }}</p>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'settings' %}" class="dropdown-item">Settings</a>
+                        <a href="/accounts/logout/" class="dropdown-item logout">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="main-footer">
+        <p>&copy; {% now "Y" %} Citizen First. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Profile Dropdown Toggle
+        const profileBtn = document.getElementById('profileBtn');
+        const profileDropdown = document.getElementById('profileDropdown');
+
+        if (profileBtn) {
+            profileBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileBtn.classList.toggle('active');
+                profileDropdown.classList.toggle('show');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (profileDropdown && !profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                    profileDropdown.classList.remove('show');
+                    profileBtn.classList.remove('active');
+                }
+            });
+        }
+
+        // Location API Fetch
+        const locElement = document.getElementById('userLocation');
+        if (locElement) {
+            const pincode = locElement.getAttribute('data-pincode');
+            if (pincode && pincode.length === 6) {
+                fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data[0].Status === 'Success') {
+                            const postOffice = data[0].PostOffice[0];
+                            // Example: Narsimhulapet SO -> Narsimhulapet
+                            locElement.textContent = postOffice.Name;
+                        }
+                    })
+                    .catch(err => console.log('Location fetch failed', err));
+            }
+        }
+    </script>
+    {% block extra_js %}{% endblock %}
+
+</body>
+
+</html>

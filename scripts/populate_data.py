@@ -1,4 +1,8 @@
 import os
+import sys
+# Add project root to sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import django
 import random
 from datetime import timedelta
@@ -141,6 +145,30 @@ def populate():
             severity=severity
         )
     print("Populated Emergency Alerts.")
+
+    # 7. Chat Messages
+    chat_msgs = [
+        ("Has anyone noticed the new park lights?", "Yes, they look great at night!"),
+        ("When is the next community meet?", "I think it's next Saturday."),
+        ("Please drive slowly near the school.", "Agreed, safety first."),
+        ("Found a set of keys near the gate.", "Please post in Lost & Found tab."),
+    ]
+    
+    ChatMessage.objects.all().delete()
+    for q, a in chat_msgs:
+        # Question
+        ChatMessage.objects.create(
+            user=random.choice(users),
+            message=q,
+            timestamp=timezone.now() - timedelta(minutes=random.randint(10, 60))
+        )
+        # Answer
+        ChatMessage.objects.create(
+            user=random.choice(users),
+            message=a,
+            timestamp=timezone.now() - timedelta(minutes=random.randint(1, 9))
+        )
+    print("Populated Chat Messages.")
 
     # 7. Polls
     poll = Poll.objects.create(
