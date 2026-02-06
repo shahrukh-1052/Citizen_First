@@ -1,6 +1,7 @@
 Django>=5.2
 gunicorn
 psycopg2-binary
-whitenoise
-python-dotenv
 dj-database-url
+python-dotenv
+whitenoise
+requests
